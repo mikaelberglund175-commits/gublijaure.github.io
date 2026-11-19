@@ -7,7 +7,7 @@ Statisk sida (ingen byggprocess, inga externa typsnitt/skript). Filer:
 - `img/` – skärmdumpar och ikon, `favicon.png`.
 
 ## Länkar som spelet använder
-Domän: **gublijaure.com** (filen `CNAME`). Repo: github.com/gublijare/gublijare.github.io.
+Domän: **gublijaure.com** (filen `CNAME`). Repo: github.com/mikaelberglund175-commits/gublijare.github.io.
 Spelet öppnar `https://gublijaure.com/?app=1&lang=xx` och `https://gublijaure.com/privacy.html?lang=xx`.
 `?app=1` döljer Ko-fi-rutan (Google Play tillåter inte länkar till andra betalsätt från appen).
 
@@ -16,7 +16,7 @@ Dubbelklicka `publish_to_github.bat` – den committar och pushar allt till GitH
 
 ## DNS hos domänleverantören
 A-poster för `@`: 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153
-CNAME `www` → `gublijare.github.io`
+CNAME `www` → `mikaelberglund175-commits.github.io`
 
 ## Publicera på GitHub Pages (första gången)
 1. Skapa ett GitHub-konto/organisation som heter **gublijare** (annars blir adressen en annan – ändra då
