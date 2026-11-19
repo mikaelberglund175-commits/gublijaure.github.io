@@ -7,7 +7,7 @@ Statisk sida (ingen byggprocess, inga externa typsnitt/skript). Filer:
 - `img/` – skärmdumpar och ikon, `favicon.png`.
 
 ## Länkar som spelet använder
-Domän: **gublijaure.com** (filen `CNAME`). Repo: github.com/mikaelberglund175-commits/gublijare.github.io.
+Domän: **gublijaure.com** (filen `CNAME`). Repo: github.com/mikaelberglund175-commits/gublijaure.github.io.
 Spelet öppnar `https://gublijaure.com/?app=1&lang=xx` och `https://gublijaure.com/privacy.html?lang=xx`.
 `?app=1` döljer Ko-fi-rutan (Google Play tillåter inte länkar till andra betalsätt från appen).
 
