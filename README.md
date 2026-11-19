@@ -34,7 +34,7 @@ CNAME `www` → `mikaelberglund175-commits.github.io`
 4. Settings ▸ Pages ▸ Source: *Deploy from a branch*, `main` / root. Sidan är uppe efter någon minut.
 
 ## Att fylla i innan release
-- **Kontakt-e-post** i `privacy.html` (sök `[e-post`) – Google Play kräver en riktig adress.
+- Kontakt-e-post: mikaelberglund175@gmail.com (klart).
 - **Ko-fi**: skapa sidan på ko-fi.com och kontrollera att `https://ko-fi.com/gublijare` stämmer (sök `ko-fi.com` i `index.html`).
 - **Google Play-knappen** pekar redan på `play.google.com/store/apps/details?id=com.gublijare.mosquito`;
   ta bort texten "kommer snart" (`playSoon` i alla tre språk) när appen är live.
