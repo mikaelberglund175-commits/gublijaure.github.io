@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gublijare Production</title>
+<meta name="description" content="Short games with no ads, ever. Gublijare Production – Mosquito: Summer Bite and more.">
+<link rel="icon" href="favicon.png">
+<style>
+/* Layout idea: an amber phosphor monitor at dusk. A pixel logo boots up like an 80s home computer,
+   then the page reads like a calm printout: story, games, rules, Google, tip jar. */
+:root{
+  --ink:#0e1117;        /* screen glass */
+  --panel:#161b24;      /* raised surface */
+  --line:#2a3240;       /* rules and borders */
+  --text:#e9e4d6;       /* warm paper white */
+  --muted:#9aa1ad;      /* secondary text */
+  --amber:#ffb238;      /* phosphor accent */
+  --amber-dim:#7a5418;
+  --display: "Arial Black","Helvetica Neue",Impact,system-ui,sans-serif;
+  --body: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono: ui-monospace,"Cascadia Mono","Consolas","SF Mono",Menlo,monospace;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{background:var(--ink)}
+body{margin:0;background:var(--ink);color:var(--text);font:17px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--amber)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+img{max-width:100%;display:block}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* top bar */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 0;font:13px/1 var(--mono);color:var(--muted)}
+.langs{display:flex;gap:4px}
+.langs button{font:600 13px/1 var(--mono);color:var(--muted);background:none;border:1px solid var(--line);padding:8px 10px;border-radius:3px;cursor:pointer}
+.langs button[aria-pressed="true"]{color:var(--ink);background:var(--amber);border-color:var(--amber)}
+
+/* hero */
+.hero{padding:28px 0 56px;border-bottom:1px solid var(--line)}
+.screen{position:relative;background:#0a0c10;border:1px solid var(--line);border-radius:14px;padding:clamp(18px,4vw,40px);overflow:hidden;
+  box-shadow:inset 0 0 80px rgba(255,178,56,.06),0 30px 60px -30px rgba(0,0,0,.8)}
+.screen::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+#logo{width:100%;height:auto;display:block;image-rendering:pixelated}
+.ready{font:clamp(14px,2vw,18px)/1.5 var(--mono);color:var(--amber);margin:18px 0 0;letter-spacing:.04em}
+.cursor{display:inline-block;width:.6em;height:1em;background:var(--amber);vertical-align:-.15em;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.thesis{font:900 clamp(30px,5.4vw,58px)/1.02 var(--display);letter-spacing:-.02em;margin:40px 0 14px;text-wrap:balance;max-width:16ch}
+.thesis em{font-style:normal;color:var(--amber)}
+.lede{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:56ch;margin:0}
+
+/* sections */
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+.label{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin:0 0 14px}
+h2{font:900 clamp(26px,3.6vw,38px)/1.1 var(--display);letter-spacing:-.015em;margin:0 0 22px;text-wrap:balance}
+h3{font:800 20px/1.25 var(--body);margin:0 0 8px}
+.prose{max-width:62ch}
+.prose p{margin:0 0 16px}
+
+/* timeline */
+.story{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:48px;align-items:start}
+.log{font:14px/1.5 var(--mono);border-left:2px solid var(--amber-dim);padding-left:18px;display:grid;gap:14px;margin:0;list-style:none}
+.log li{position:relative}
+.log li::before{content:"";position:absolute;left:-24px;top:7px;width:10px;height:10px;background:var(--ink);border:2px solid var(--amber);border-radius:50%}
+.log b{color:var(--amber);font-weight:600;font-variant-numeric:tabular-nums;display:block}
+.log span{color:var(--muted)}
+
+/* game card */
+.games{display:grid;gap:22px}
+.game{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.game-head{display:flex;gap:18px;align-items:center;padding:22px 22px 0}
+.game-head img{width:84px;height:84px;border-radius:20px;flex:none}
+.game-head h3{font:900 clamp(22px,3vw,30px)/1.05 var(--display);margin:0 0 6px;letter-spacing:-.01em}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.tags li{font:12px/1 var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 10px}
+.shots{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:20px 22px;scrollbar-color:var(--amber-dim) transparent}
+.shots figure{margin:0;flex:0 0 min(78%,560px);scroll-snap-align:start}
+.shots img{border-radius:8px;border:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;width:100%}
+.shots figcaption{font:12px/1.4 var(--mono);color:var(--muted);margin-top:8px}
+.game-body{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;padding:0 22px 24px}
+.game-body p{margin:0 0 12px}
+.cta{display:flex;flex-direction:column;gap:10px}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:10px;text-decoration:none;font:700 16px/1 var(--body);padding:15px 18px;border-radius:8px;border:1px solid var(--line);color:var(--text);background:var(--ink)}
+.btn.primary{background:var(--amber);border-color:var(--amber);color:#1b1206}
+.btn small{font:500 12px/1 var(--mono);opacity:.8}
+.soon{background:transparent;border:1px dashed var(--line);border-radius:14px;padding:22px;display:flex;gap:16px;align-items:center;color:var(--muted)}
+.soon .px{font:28px/1 var(--mono);color:var(--amber)}
+
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:0;padding:0;list-style:none}
+.rules li{border-top:3px solid var(--amber);padding-top:16px}
+.rules p{margin:0;color:var(--muted)}
+.big0{font:900 54px/1 var(--display);color:var(--amber);font-variant-numeric:tabular-nums;margin-bottom:8px}
+
+/* google */
+.google{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.note{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px}
+.note p{margin:0;color:var(--muted);font-size:16px}
+.note .k{font:600 12px/1 var(--mono);letter-spacing:.12em;color:var(--amber);display:block;margin-bottom:10px}
+
+/* tip jar */
+.tip{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:36px;align-items:center}
+.jar{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;text-align:center}
+.jar svg{width:110px;height:auto;margin:0 auto 12px;display:block}
+.jar .btn{width:100%}
+.jar p{font-size:14px;color:var(--muted);margin:12px 0 0}
+
+footer{padding:36px 0 56px;font:13px/1.7 var(--mono);color:var(--muted)}
+footer nav{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:10px}
+
+@media (max-width:820px){
+  .story,.game-body,.tip{grid-template-columns:1fr}
+  .rules,.google{grid-template-columns:1fr}
+  .shots figure{flex-basis:86%}
+}
+@media (prefers-reduced-motion:reduce){.cursor{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <span>GUBLIJARE PRODUCTION · EST. 2026</span>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" id="l-sv" data-l="sv">SV</button>
+      <button type="button" id="l-en" data-l="en">EN</button>
+      <button type="button" id="l-fi" data-l="fi">FI</button>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="screen">
+      <h1 class="sr">Gublijare Production</h1>
+      <canvas id="logo" width="960" height="250" aria-hidden="true"></canvas>
+      <p class="ready"><span data-i="ready">READY.</span> <span class="cursor"></span></p>
+    </div>
+    <p class="thesis" data-i="thesis">Short games. <em>Zero ads.</em> Made with time I got back.</p>
+    <p class="lede" data-i="lede">A one-person game studio run by a software engineer with thirty years in the trade and a gamer since the 80s.</p>
+  </header>
+
+  <section id="story">
+    <p class="label" data-i="storyLabel">The story</p>
+    <div class="story">
+      <div class="prose">
+        <h2 data-i="storyH">Thirty years of code. Then AI bought me time.</h2>
+        <div data-i="storyP">
+          <p>I have built software for a living for thirty years. Systems, integrations, deadlines and late-night fixes. Good work, but it ate the evenings.</p>
+          <p>Then AI turned up as a colleague, and something unexpected happened: it gave me time back. The routine parts go faster, and the hours that used to vanish are mine again.</p>
+          <p>I have played games since the 80s, from cassette-loading home computers to today's phones. So I spend that time on the games I want to play myself: short, a little absurd, finished in a coffee break.</p>
+          <p>And there will be no ads in them. Not a banner, not a "watch a video to continue". Never.</p>
+        </div>
+      </div>
+      <ol class="log" aria-label="Timeline">
+        <li><b>198x</b><span data-i="t1">First home computer. Loading games from tape, one beep at a time.</span></li>
+        <li><b>1996</b><span data-i="t2">First paid job as a software engineer.</span></li>
+        <li><b>1996–2026</b><span data-i="t3">Thirty years of systems, code and coffee.</span></li>
+        <li><b>2026</b><span data-i="t4">AI as a co-worker. Evenings come back. Gublijare Production starts.</span></li>
+        <li><b>NOW</b><span data-i="t5">Short games, no ads. Mosquito comes first.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="games">
+    <p class="label" data-i="gamesLabel">Games</p>
+    <h2 data-i="gamesH">On the shelf</h2>
+    <div class="games">
+      <article class="game" aria-labelledby="mq-title">
+        <div class="game-head">
+          <img src="img/mosquito_icon.png" alt="Mosquito app icon" width="84" height="84">
+          <div>
+            <h3 id="mq-title">Mosquito: <span data-i="mqSub">Summer Bite</span></h3>
+            <ul class="tags">
+              <li>Android</li><li data-i="tagLang">Svenska · English · Suomi</li><li data-i="tagFree">Free, no ads</li><li data-i="tagLen">3–5 min rounds</li>
+            </ul>
+          </div>
+        </div>
+        <div class="shots" tabindex="0" aria-label="Screenshots">
+          <figure><img src="img/mosquito_02.jpg" alt="Scouting the garden party, picking a victim and a landing zone" loading="lazy" width="1280" height="720"><figcaption data-i="c2">Pick a victim and a landing spot. Hands are nearly impossible.</figcaption></figure>
+          <figure><img src="img/mosquito_07.jpg" alt="Mosquito Academy, flying through rings of fire" loading="lazy" width="1280" height="720"><figcaption data-i="c7">Mosquito Academy: rings of fire, the green one is next.</figcaption></figure>
+          <figure><img src="img/mosquito_04.jpg" alt="SPLAT screen after the mosquito got swatted" loading="lazy" width="1280" height="720"><figcaption data-i="c4">It happens. Usually to Grandpa's hands.</figcaption></figure>
+          <figure><img src="img/mosquito_05.jpg" alt="Mosquito Academy hub with five training stations" loading="lazy" width="1280" height="720"><figcaption data-i="c5">Five absurd training stations, then the Mosquito Wings badge.</figcaption></figure>
+          <figure><img src="img/mosquito_01.jpg" alt="Main menu in English" loading="lazy" width="1280" height="720"><figcaption data-i="c1">Main menu, in English.</figcaption></figure>
+          <figure><img src="img/mosquito_08.jpg" alt="Main menu in Finnish" loading="lazy" width="1280" height="720"><figcaption data-i="c8">The same, in Finnish.</figcaption></figure>
+        </div>
+        <div class="game-body">
+          <div data-i="mqBody">
+            <p>A hot summer day, a family garden party, and you: one small, hungry mosquito. Pick a victim, dive in with a Stuka howl, dodge hands, newspapers and dragonflies, then land and bite in three steps: inject, drill, pump. Fly home before the slap, and before the sun gets too high.</p>
+            <p>Want to train first? Sergeant Stingmire runs the Mosquito Academy. Earn your wings and you get the Academy Reflex, which saves your life once per day.</p>
+          </div>
+          <div class="cta">
+            <a class="btn primary" id="play" href="https://play.google.com/store/apps/details?id=com.gublijare.mosquito"><span data-i="playBtn">Google Play</span> <small data-i="playSoon">coming soon</small></a>
+            <a class="btn" href="privacy.html" id="privLink" data-i="privBtn">Privacy policy</a>
+          </div>
+        </div>
+      </article>
+      <div class="soon"><span class="px" aria-hidden="true">▚</span><span data-i="soon">More short games are in the workshop. No release dates, no hype, no ads.</span></div>
+    </div>
+  </section>
+
+  <section id="rules">
+    <p class="label" data-i="rulesLabel">House rules</p>
+    <h2 data-i="rulesH">Three zeros in every game</h2>
+    <ul class="rules">
+      <li><div class="big0">0</div><h3 data-i="r1h">ads</h3><p data-i="r1p">No banners, no videos, no "watch to continue". Not now, not later.</p></li>
+      <li><div class="big0">0</div><h3 data-i="r2h">data collected</h3><p data-i="r2p">No accounts, no analytics, no tracking. High scores stay on your phone.</p></li>
+      <li><div class="big0">0</div><h3 data-i="r3h">hours to finish a round</h3><p data-i="r3p">Short games for short breaks. A round takes minutes, not evenings.</p></li>
+    </ul>
+  </section>
+
+  <section id="google">
+    <p class="label">Google</p>
+    <h2 data-i="gH">Notes about Google</h2>
+    <div class="google">
+      <div class="note"><span class="k" data-i="g1k">GOOGLE PLAY</span><p data-i="g1p">Our games are published on Google Play for Android. Mosquito is going through Google's testing and review now; the button above works once it is live.</p></div>
+      <div class="note"><span class="k" data-i="g2k">PRIVACY POLICY</span><p data-i="g2p">Google Play requires a privacy policy for every app. Ours is short, because there is almost nothing to say: <a href="privacy.html">read it here</a>.</p></div>
+      <div class="note"><span class="k" data-i="g3k">NO GOOGLE TRACKING</span><p data-i="g3p">No Google Analytics, no Firebase, no AdMob, in the games or on this site. This page loads no fonts or scripts from anyone. If you leave a tip in a game, Google Play handles the payment and we never see your card.</p></div>
+    </div>
+  </section>
+
+  <section id="tip">
+    <div class="tip">
+      <div class="prose">
+        <p class="label" data-i="tipLabel">Tip jar</p>
+        <h2 data-i="tipH">Like the games? Buy the mosquito a coffee.</h2>
+        <div data-i="tipP">
+          <p>Everything is free and stays free. If a game made your coffee break better, you can drop something in the tip jar. It changes nothing in the games and unlocks nothing; it just says thanks and keeps the next game coming.</p>
+          <p>In Mosquito you can also tip from the menu, through Google Play.</p>
+        </div>
+      </div>
+      <div class="jar" id="jar">
+        <svg viewBox="0 0 120 130" aria-hidden="true">
+          <rect x="34" y="6" width="52" height="14" rx="3" fill="#7a5418"/>
+          <path d="M30 22h60c6 0 8 6 8 12v74c0 10-8 16-18 16H40c-10 0-18-6-18-16V34c0-6 2-12 8-12z" fill="none" stroke="#ffb238" stroke-width="4"/>
+          <path d="M26 74h68v32c0 9-7 14-16 14H42c-9 0-16-5-16-14z" fill="#ffb238" opacity=".22"/>
+          <circle cx="48" cy="96" r="9" fill="#ffb238"/><circle cx="70" cy="102" r="7" fill="#ffb238" opacity=".8"/><circle cx="62" cy="84" r="6" fill="#ffb238" opacity=".6"/>
+        </svg>
+        <a class="btn primary" id="kofi" href="https://ko-fi.com/gublijaure" data-i="kofiBtn">Tip on Ko-fi</a>
+        <p data-i="kofiNote">Ko-fi takes card or PayPal. Any amount, no account needed.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <nav>
+      <a href="privacy.html" id="privFoot" data-i="privBtn">Privacy policy</a>
+      <a href="#games" data-i="navGames">Games</a>
+      <a href="#tip" id="navTip" data-i="navTip">Tip jar</a>
+    </nav>
+    <div data-i="foot">© 2026 Gublijare Production. All characters, people and places in our games are fictional. We take no responsibility for real mosquito bites.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+const T={
+ sv:{ready:"KLAR.",thesis:"Korta spel. <em>Noll reklam.</em> Gjorda på tid jag fick tillbaka.",
+  lede:"En enmansstudio för spel, driven av en mjukvaruingenjör med trettio år i yrket och gamer sedan 80-talet.",
+  storyLabel:"Berättelsen",storyH:"Trettio år av kod. Sen köpte AI mig tid.",
+  storyP:"<p>Jag har byggt mjukvara som yrke i trettio år. System, integrationer, deadlines och nattliga felrättningar. Bra jobb, men det åt upp kvällarna.</p><p>Sen dök AI upp som kollega, och något oväntat hände: jag fick tid tillbaka. Rutinjobbet går fortare, och timmarna som brukade försvinna är mina igen.</p><p>Jag har spelat spel sedan 80-talet, från hemdatorer som laddade från kassettband till dagens mobiler. Så den tiden lägger jag på spel jag själv vill spela: korta, lite absurda, klara på en fikapaus.</p><p>Och det blir ingen reklam i dem. Ingen banner, inget \"titta på en video för att fortsätta\". Aldrig.</p>",
+  t1:"Första hemdatorn. Spel laddas från band, ett pip i taget.",t2:"Första betalda jobbet som mjukvaruingenjör.",t3:"Trettio år av system, kod och kaffe.",t4:"AI som arbetskamrat. Kvällarna kommer tillbaka. Gublijare Production startar.",t5:"Korta spel, ingen reklam. Mosquito först ut.",
+  gamesLabel:"Spel",gamesH:"På hyllan",mqSub:"Sommarbettet",tagFree:"Gratis, ingen reklam",tagLen:"Rundor på 3–5 min",
+  c2:"Välj offer och landningsplats. Händerna är nästan omöjliga.",c7:"Myggakademin: eldringar, den gröna är nästa.",c4:"Det händer. Oftast vid farfars händer.",c5:"Fem absurda träningsstationer, sen Myggvingarna.",c1:"Huvudmenyn på engelska.",c8:"Samma sak på finska.",
+  mqBody:"<p>En het sommardag, familjens trädgårdsfest, och du: en liten hungrig mygga. Välj offer, dyk in med stukatjut, undvik händer, tidningar och trollsländor, landa och bit i tre steg: bedöva, borra, pumpa. Flyg hem innan smällen kommer, och innan solen står för högt.</p><p>Vill du träna först? Sergeant Stickmyr driver Myggakademin. Ta dina vingar så får du Akademireflexen, som räddar livet en gång per dag.</p>",
+  playBtn:"Google Play",playSoon:"kommer snart",privBtn:"Integritetspolicy",soon:"Fler korta spel är på gång i verkstan. Inga releasedatum, ingen hype, ingen reklam.",
+  rulesLabel:"Husregler",rulesH:"Tre nollor i varje spel",r1h:"reklam",r1p:"Inga banners, inga videor, inget \"titta för att fortsätta\". Inte nu, inte sen.",r2h:"insamlad data",r2p:"Inga konton, ingen analys, ingen spårning. Rekorden stannar i din telefon.",r3h:"timmar per runda",r3p:"Korta spel för korta pauser. En runda tar minuter, inte kvällar.",
+  gH:"Om Google",g1k:"GOOGLE PLAY",g1p:"Våra spel ges ut på Google Play för Android. Mosquito går igenom Googles testning och granskning nu; knappen ovan fungerar när spelet är ute.",
+  g2k:"INTEGRITETSPOLICY",g2p:"Google Play kräver en integritetspolicy för varje app. Vår är kort, för det finns nästan inget att säga: <a href=\"privacy.html\">läs den här</a>.",
+  g3k:"INGEN GOOGLE-SPÅRNING",g3p:"Ingen Google Analytics, ingen Firebase, ingen AdMob, varken i spelen eller på den här sidan. Sidan laddar inga typsnitt eller skript från någon annan. Ger du dricks i ett spel sköter Google Play betalningen och vi ser aldrig ditt kort.",
+  tipLabel:"Dricksburk",tipH:"Gillar du spelen? Bjud myggan på en kaffe.",tipP:"<p>Allt är gratis och förblir gratis. Om ett spel gjorde fikapausen bättre kan du lägga något i dricksburken. Det ändrar inget i spelen och låser inte upp något; det säger bara tack och håller nästa spel på gång.</p><p>I Mosquito kan du också ge dricks från menyn, via Google Play.</p>",
+  kofiBtn:"Ge dricks på Ko-fi",kofiNote:"Ko-fi tar kort eller PayPal. Valfritt belopp, inget konto behövs.",navGames:"Spel",navTip:"Dricksburk",
+  foot:"© 2026 Gublijare Production. Alla figurer, personer och platser i våra spel är påhittade. Vi tar inget ansvar för riktiga myggbett."},
+ en:{},
+ fi:{ready:"VALMIS.",thesis:"Lyhyitä pelejä. <em>Nolla mainosta.</em> Tehty ajalla, jonka sain takaisin.",
+  lede:"Yhden hengen pelistudio. Takana ohjelmistoinsinööri, jolla on kolmekymmentä vuotta alalla ja pelaamista 80-luvulta asti.",
+  storyLabel:"Tarina",storyH:"Kolmekymmentä vuotta koodia. Sitten tekoäly osti minulle aikaa.",
+  storyP:"<p>Olen tehnyt ohjelmistoja työkseni kolmekymmentä vuotta. Järjestelmiä, integraatioita, deadlineja ja yöllisiä korjauksia. Hyvää työtä, mutta se söi illat.</p><p>Sitten tekoäly tuli työkaveriksi, ja tapahtui jotain odottamatonta: sain aikaa takaisin. Rutiinit sujuvat nopeammin, ja ennen kadonneet tunnit ovat taas minun.</p><p>Olen pelannut 80-luvulta asti, kasetilta latautuvista kotimikroista tämän päivän puhelimiin. Siksi käytän sen ajan peleihin, joita haluan itse pelata: lyhyisiin, vähän absurdeihin, kahvitauon mittaisiin.</p><p>Eikä niissä ole mainoksia. Ei bannereita, ei \"katso video jatkaaksesi\". Ei koskaan.</p>",
+  t1:"Ensimmäinen kotimikro. Pelit latautuvat kasetilta piippaus kerrallaan.",t2:"Ensimmäinen palkallinen työ ohjelmistoinsinöörinä.",t3:"Kolmekymmentä vuotta järjestelmiä, koodia ja kahvia.",t4:"Tekoäly työkaverina. Illat palaavat. Gublijare Production aloittaa.",t5:"Lyhyitä pelejä ilman mainoksia. Mosquito ensimmäisenä.",
+  gamesLabel:"Pelit",gamesH:"Hyllyssä",mqSub:"Kesäpisto",tagFree:"Ilmainen, ei mainoksia",tagLen:"3–5 min kierrokset",
+  c2:"Valitse uhri ja laskeutumispaikka. Kädet ovat lähes mahdottomia.",c7:"Hyttysakatemia: tulirenkaat, vihreä on seuraava.",c4:"Sattuu sitä. Yleensä vaarin käsien kohdalla.",c5:"Viisi absurdia harjoituspistettä, sitten Hyttyssiivet.",c1:"Päävalikko englanniksi.",c8:"Sama suomeksi.",
+  mqBody:"<p>Kuuma kesäpäivä, perheen puutarhajuhlat ja sinä: pieni nälkäinen hyttynen. Valitse uhri, syöksy sisään Stukan ulvonnalla, väistele käsiä, sanomalehtiä ja sudenkorentoja, laskeudu ja piste kolmessa vaiheessa: puuduta, poraa, pumppaa. Lennä kotiin ennen läimäystä ja ennen kuin aurinko nousee liian korkealle.</p><p>Haluatko harjoitella ensin? Kersantti Pistosuo johtaa Hyttysakatemiaa. Ansaitse siivet, niin saat Akatemiarefleksin, joka pelastaa henkesi kerran päivässä.</p>",
+  playBtn:"Google Play",playSoon:"tulossa pian",privBtn:"Tietosuojakäytäntö",soon:"Lisää lyhyitä pelejä on työn alla. Ei julkaisupäiviä, ei hypeä, ei mainoksia.",
+  rulesLabel:"Talon säännöt",rulesH:"Kolme nollaa joka pelissä",r1h:"mainosta",r1p:"Ei bannereita, ei videoita, ei \"katso jatkaaksesi\". Ei nyt eikä myöhemmin.",r2h:"kerättyä tietoa",r2p:"Ei tilejä, ei analytiikkaa, ei seurantaa. Ennätykset pysyvät puhelimessasi.",r3h:"tuntia per kierros",r3p:"Lyhyitä pelejä lyhyille tauoille. Kierros kestää minuutteja, ei iltoja.",
+  gH:"Huomioita Googlesta",g1k:"GOOGLE PLAY",g1p:"Pelimme julkaistaan Google Playssa Androidille. Mosquito on nyt Googlen testauksessa ja tarkastuksessa; yllä oleva painike toimii, kun peli on julkaistu.",
+  g2k:"TIETOSUOJAKÄYTÄNTÖ",g2p:"Google Play vaatii jokaiselta sovellukselta tietosuojakäytännön. Meidän on lyhyt, koska kerrottavaa ei juuri ole: <a href=\"privacy.html\">lue se tästä</a>.",
+  g3k:"EI GOOGLE-SEURANTAA",g3p:"Ei Google Analyticsia, ei Firebasea, ei AdMobia, ei peleissä eikä tällä sivulla. Sivu ei lataa fontteja tai skriptejä muualta. Jos annat pelissä tipin, Google Play hoitaa maksun emmekä koskaan näe korttiasi.",
+  tipLabel:"Tippipurkki",tipH:"Pidätkö peleistä? Tarjoa hyttyselle kahvi.",tipP:"<p>Kaikki on ilmaista ja pysyy ilmaisena. Jos peli piristi kahvitaukoasi, voit pudottaa jotain tippipurkkiin. Se ei muuta peleissä mitään eikä avaa mitään; se vain sanoo kiitos ja pitää seuraavan pelin tulossa.</p><p>Mosquitossa voit antaa tipin myös valikosta Google Playn kautta.</p>",
+  kofiBtn:"Anna tippi Ko-fissa",kofiNote:"Ko-fi hyväksyy kortin tai PayPalin. Mikä tahansa summa, tiliä ei tarvita.",navGames:"Pelit",navTip:"Tippipurkki",
+  foot:"© 2026 Gublijare Production. Kaikki peliemme hahmot, ihmiset ja paikat ovat kuvitteellisia. Emme vastaa oikeista hyttysenpistoista."}
+};
+const tagLang={sv:"Svenska · English · Suomi",en:"Svenska · English · Suomi",fi:"Svenska · English · Suomi"};
+const els=[...document.querySelectorAll("[data-i]")];
+els.forEach(e=>{T.en[e.dataset.i]=T.en[e.dataset.i]||e.innerHTML;});
+let params; try{params=new URLSearchParams(location.search);}catch(e){params=new URLSearchParams("");}
+// Opened from inside the game: hide the Ko-fi jar (Google Play rules: no other payment links from apps).
+if(params.get("app")==="1"){const j=document.getElementById("tip");if(j)j.remove();const n=document.getElementById("navTip");if(n)n.remove();}
+function pick(){
+  const q=(params.get("lang")||"").toLowerCase(); if(T[q])return q;
+  try{const s=localStorage.getItem("gub_lang"); if(T[s])return s;}catch(e){}
+  const n=(navigator.language||"en").slice(0,2).toLowerCase(); return T[n]?n:"en";
+}
+function setLang(l){
+  document.documentElement.lang=l;
+  document.querySelectorAll("[data-i]").forEach(e=>{const v=T[l][e.dataset.i]; if(v!==undefined)e.innerHTML=v; else e.innerHTML=T.en[e.dataset.i];});
+  document.querySelectorAll(".langs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===l?"true":"false"));
+  document.querySelectorAll('a[href^="privacy.html"]').forEach(a=>a.setAttribute("href","privacy.html?lang="+l));
+  try{localStorage.setItem("gub_lang",l);}catch(e){}
+}
+document.querySelectorAll(".langs button").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.l)));
+setLang(pick());
+
+/* Pixel logo: 5x7 bitmap font, boots in row by row like an old home computer. */
+const F={G:["01110","10001","10000","10111","10001","10001","01111"],U:["10001","10001","10001","10001","10001","10001","01110"],
+B:["11110","10001","10001","11110","10001","10001","11110"],L:["10000","10000","10000","10000","10000","10000","11111"],
+I:["11111","00100","00100","00100","00100","00100","11111"],J:["00111","00010","00010","00010","00010","10010","01100"],
+A:["01110","10001","10001","11111","10001","10001","10001"],R:["11110","10001","10001","11110","10100","10010","10001"],
+E:["11111","10000","10000","11110","10000","10000","11111"],P:["11110","10001","10001","11110","10000","10000","10000"],
+O:["01110","10001","10001","10001","10001","10001","01110"],D:["11100","10010","10001","10001","10001","10010","11100"],
+C:["01110","10001","10000","10000","10000","10001","01110"],T:["11111","00100","00100","00100","00100","00100","00100"],
+N:["10001","11001","10101","10011","10001","10001","10001"]," ":["00000","00000","00000","00000","00000","00000","00000"]};
+const cv=document.getElementById("logo"),cx=cv.getContext("2d");
+const W=cv.width,H=cv.height;
+function word(s,cell){const w=s.length*6*cell-cell;return w;}
+const big="GUBLIJARE",small="PRODUCTION";
+const cb=Math.floor(W/(big.length*6)), cs=Math.max(4,Math.floor(cb*0.42));
+const bx=Math.round((W-word(big,cb))/2), by=10, sx=Math.round((W-word(small,cs))/2), sy=by+7*cb+cb*1.2;
+cv.height=Math.ceil(sy+7*cs+12);
+const px=[];
+function lay(s,x0,y0,c,col){[...s].forEach((ch,i)=>{const g=F[ch];g.forEach((row,r)=>[...row].forEach((v,k)=>{if(v==="1")px.push({x:x0+(i*6+k)*c,y:y0+r*c,c:c,row:r,col:col});}));});}
+lay(big,bx,by,cb,"#ffb238"); lay(small,sx,sy,cs,"#e9e4d6");
+function draw(upto){
+  cx.clearRect(0,0,cv.width,cv.height);
+  cx.shadowColor="rgba(255,178,56,.55)"; cx.shadowBlur=14;
+  px.forEach(p=>{const k=p.row+(p.col==="#ffb238"?0:8); if(k<=upto){cx.fillStyle=p.col; cx.fillRect(p.x+1,p.y+1,p.c-2,p.c-2);}});
+}
+const still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(still){draw(99);}else{let step=0;draw(-1);const id=setInterval(()=>{draw(step++);if(step>16)clearInterval(id);},70);}
+})();
+</script>
+</body>
+</html>
